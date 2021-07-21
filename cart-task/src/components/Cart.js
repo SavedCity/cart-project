@@ -1,68 +1,86 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function App() {
+export default function App(props) {
   const [quantity, setQuantity] = useState(1);
-  const [products, setProducts] = useState([
+  const [products] = useState([
     {
       id: 1,
-      name: "iPhone 12 Pro Max",
-      description: "Pacific blue iPhone 12 Pro. 5G speed...",
-      price: 1049.99,
+      name: "Ray-Ban Sunglasses",
+      description: "Men's Sunglasses, Ray-Ban shiny black wit...",
+      price: 138.39,
       image:
-        "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-12-pro-family-hero?wid=940&hei=1112&fmt=jpeg&qlt=80&.v=1604021663000",
+        "https://optimaxweb.glassesusa.com/image/upload/f_auto,q_auto/media/catalog/product/4/6/46-001661_f.jpg",
     },
-
     {
       id: 2,
-      name: "Toothbrush",
-      description: "Bamboo toothbrush with replaceable head",
-      price: 4.79,
+      name: "Extra Tall Top Hat",
+      description:
+        "Whether you're dressing up as Abraham Lincoln or a magician for Halloween this yea...",
+      price: 28.99,
       image:
-        "https://cdn.shopify.com/s/files/1/1704/0849/products/ToothBrushTeal_bc4c6c15-cf79-4bb5-87cc-28109b5e7605_1024x1024.jpg?v=1607029152",
+        "https://i5.walmartimages.com/asr/39487394-5fae-41ec-a61c-d3265295f11c_1.503a5c8f4aea1eaa4d67a59e6af9ec3c.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff",
     },
     {
       id: 3,
-      name: "Wallet",
-      description: "Credit Wallet with ID Pass-case",
-      price: 49.99,
+      name: "Men's Navy Blue Coat",
+      description:
+        "The navy blue single-breasted cashmere coat is perfectly tailored in a timeless, regul...",
+      price: 179.99,
       image:
-        "https://bosca.com/media/catalog/product/cache/64a917206e88052f26a2cdad740e4c36/1/9/195-59_1_1.jpg",
+        "https://images-dynamic-arcteryx.imgix.net/S21/1350x1710/Keppel-Trench-Coat-Megacosm.jpg?auto=format&w=1350",
+    },
+    {
+      id: 4,
+      name: "Sneakers DIESEL",
+      description: "S-Nentish Y01172 P1159 H2582 Black/Gold",
+      price: 114.99,
+      image:
+        "https://www.efootwear.eu/media/catalog/product/cache/image/650x650/0/0/0000199592942_1__pl.jpg",
     },
   ]);
   const [inCartItems, setInCartItems] = useState(products);
 
-  const removeFromCart = (productToRemove) => {
-    setInCartItems(
-      inCartItems.filter((products) => products !== productToRemove)
-    );
-  };
-
-  let pricesArray = inCartItems.map((items) => {
-    return items.price;
-  });
-  let total = pricesArray.reduce((a, b) => {
-    return a + b;
-  }, 0);
-
+  // Clears the cart by emptying the items array
   const clearCart = () => {
     setInCartItems([]);
   };
 
+  // Mapping through the items' prices in the cart and setting it to a variable
+  let pricesArray = inCartItems.map((items) => {
+    return items.price;
+  });
+  // Sum of the cart items before there's any updates on their quantity
+  let initialTotal = pricesArray.reduce((a, b) => {
+    return a + b;
+  }, 0);
+  // cartTotal state which takes an initial value of the initial cart items' prices
+  const [cartTotal, setCartTotal] = useState(initialTotal);
+
+  // Updating the quantity
   let updateQuantity = () => {
+    pricesArray = [];
     for (let i = 0; i < inCartItems.length; i++) {
-      var qtyInput = document.querySelectorAll("#quantity")[i];
-      var itemPrice = document.querySelectorAll("#price")[i];
+      let qtyInput = document.querySelectorAll("#quantity")[i];
+      let itemPrice = document.querySelectorAll("#price")[i];
       let qtyMult = qtyInput.value * itemPrice.firstChild.wholeText;
-      console.log(qtyMult);
+      pricesArray.push(qtyMult);
     }
+    setCartTotal(
+      pricesArray.reduce((a, b) => {
+        return a + b;
+      }, 0)
+    );
   };
 
-  let handleChange = (e) => {
-    console.log(e.target.value);
+  let handleChange = (event) => {};
+
+  // Removing item from the cart
+  let removeFromCart = (productToRemove) => {
+    setInCartItems(inCartItems.filter((item) => item !== productToRemove));
   };
 
-  console.log(total);
+  props.setCheckoutTotal(cartTotal.toFixed(2));
 
   return (
     <div className="container">
@@ -126,17 +144,18 @@ export default function App() {
                             defaultValue={quantity}
                             id="quantity"
                             min={1}
+                            key={item.id}
                           />
                         </div>
                         <div className="col-xs-2">
-                          <button
-                            onClick={() => {
+                          <span
+                            onClick={(e) => {
                               removeFromCart(item);
                             }}
-                            className="btn btn-link btn-xs"
+                            className="btn btn-link btn-xs glyphicon glyphicon-trash"
                           >
-                            <span className="glyphicon glyphicon-trash"> </span>
-                          </button>
+                            {" "}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -149,7 +168,7 @@ export default function App() {
                 {pricesArray.length >= 1 && (
                   <div className="text-center">
                     <div className="col-xs-9">
-                      <h6 className="text-right">Added items?</h6>
+                      <h6 className="text-right">Added or removed items?</h6>
                     </div>
                     <div className="col-xs-3">
                       <button
@@ -176,7 +195,7 @@ export default function App() {
                     <strong>
                       {pricesArray.length < 1
                         ? "Your cart is empty"
-                        : "Total: " + total}
+                        : "Total: $" + cartTotal.toFixed(2)}
                     </strong>
                   </h4>
                 </div>

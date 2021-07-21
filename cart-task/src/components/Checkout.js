@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 
-export default function Checkout() {
-  function paymentConfirmed() {
-    alert("Thank you for your purchase!");
-  }
+export default function Checkout(props) {
+  // function paymentConfirmed() {
+  //   alert(
+  //     "Thank you for your purchase! $" +
+  //       props.checkoutTotal +
+  //       " will be charged to your account."
+  //   );
+  // }
   return (
     <div>
       <div className="container">
@@ -74,33 +78,31 @@ export default function Checkout() {
                       </div>
                     </div>
                   </div>
+                  <ul className="nav nav-pills nav-stacked">
+                    <li className="active">
+                      <Link href="/checkout">
+                        <span className="badge pull-right">
+                          <span className="glyphicon glyphicon-usd"></span>
+                          {props.checkoutTotal}
+                        </span>{" "}
+                        Final Payment
+                      </Link>
+                    </li>
+                  </ul>
+                  <br />
+
+                  <button
+                    type="submit"
+                    className="btn btn-success btn-lg btn-block"
+                  >
+                    Pay
+                  </button>
                 </form>
               </div>
             </div>
-            <ul className="nav nav-pills nav-stacked">
-              <li className="active">
-                <a href="/checkout">
-                  <span className="badge pull-right">
-                    <span className="glyphicon glyphicon-usd"></span>
-                    {}
-                  </span>{" "}
-                  Final Payment
-                </a>
-              </li>
-            </ul>
-            <br />
-            <button
-              className="btn btn-success btn-lg btn-block"
-              onClick={paymentConfirmed}
-            >
-              Pay
-            </button>
-            <Link
-              to="/"
-              className="btn btn-danger btn-sm btn-block"
-              role="button"
-            >
-              Cancel
+
+            <Link to="/" className="btn btn-warning btn-md" role="button">
+              Back to cart
             </Link>
           </div>
         </div>

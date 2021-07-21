@@ -5,13 +5,9 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Checkout from "./components/Checkout";
-
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Route path="/" component={App} exact />
-      <Route path="/checkout" component={Checkout} />
-    </Router>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
