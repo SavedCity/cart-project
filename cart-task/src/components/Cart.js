@@ -58,7 +58,7 @@ export default function App(props) {
   const [cartTotal, setCartTotal] = useState(initialTotal);
 
   // Updating the quantity
-  let updateQuantity = () => {
+  let updateItemQuantity = () => {
     pricesArray = [];
     for (let i = 0; i < inCartItems.length; i++) {
       let qtyInput = document.querySelectorAll("#quantity")[i];
@@ -73,10 +73,12 @@ export default function App(props) {
     );
   };
 
-  let handleChange = (event) => {};
+  let handleChange = () => {
+    console.log("Changed input value");
+  };
 
   // Removing item from the cart
-  let removeFromCart = (productToRemove) => {
+  let removeItemFromCart = (productToRemove) => {
     setInCartItems(inCartItems.filter((item) => item !== productToRemove));
   };
 
@@ -150,7 +152,7 @@ export default function App(props) {
                         <div className="col-xs-2">
                           <span
                             onClick={(e) => {
-                              removeFromCart(item);
+                              removeItemFromCart(item);
                             }}
                             className="btn btn-link btn-xs glyphicon glyphicon-trash"
                           >
@@ -173,7 +175,7 @@ export default function App(props) {
                     <div className="col-xs-3">
                       <button
                         className="btn btn-warning btn-sm btn-block"
-                        onClick={updateQuantity}
+                        onClick={updateItemQuantity}
                       >
                         Update cart
                       </button>
